@@ -5,6 +5,8 @@ set(PROJECT_VERSION 0.10.0)
 include(CheckFunctionExists)
 include(CheckIncludeFile)
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
 set(enable-unichar  0       CACHE BOOL "enable unichar(no)")
 set(enable-cfstring 0       CACHE BOOL "enable cfstring(no)")
 set(enable-wchar_t  1       CACHE BOOL "enable wchar_t")
@@ -52,6 +54,12 @@ if(with-SMTP)
     set(HAS_LIBESMTP 0)
 endif()
 
+# Add vars for apr and apr-util
+set(APR_INCLUDE_DIR CACHE PATH "Path to Apache Portable Runtime include directory")
+set(APR_LIBRARY CACHE FILEPATH "Path to Apache Portable Runtime library")
+set(APR_UTIL_INCLUDE_DIR CACHE PATH "Path to APR-UTIL include directory")
+set(APR_UTIL_LIBRARY CACHE FILEPATH "Path to APR-UTIL library")
+
 # configure log4cxx.h
 configure_file(${PROJECT_SOURCE_DIR}/src/main/include/log4cxx/log4cxx.h.in
     ${PROJECT_BINARY_DIR}/log4cxx/log4cxx.h
@@ -77,12 +85,13 @@ set_target_properties(log4cxx
 )
 target_include_directories(log4cxx
     PUBLIC
-        /usr/include/apr-1
+        ${APR_INCLUDE_DIR}
+        ${APR_UTIL_INCLUDE_DIR}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/main/include>
         $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(log4cxx PUBLIC apr-1 aprutil-1)
+target_link_libraries(log4cxx PUBLIC ${APR_LIBRARY} ${APR_UTIL_LIBRARY})
 install(TARGETS log4cxx
     EXPORT log4cxx-export
     LIBRARY DESTINATION lib
