@@ -20,14 +20,18 @@
 find_path(APRutil_INCLUDE_DIR
   apu.h
   HINTS
+    ${APRutil_INSTALL_DIR}/include
     ${APRutil_INSTALL_DIR}/include/apr-1
     /usr/include/apr-1
 )
 
 find_library(APRutil_LIBRARY
-  libaprutil-1.so
-  HINTS ${APRutil_INSTALL_DIR}/lib
-  /usr/lib
+  NAMES
+    libaprutil-1.lib
+    aprutil-1
+  HINTS
+    ${APRutil_INSTALL_DIR}/lib
+    /usr/lib
 )
 
 

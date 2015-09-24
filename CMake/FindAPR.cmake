@@ -19,12 +19,15 @@
 find_path(APR_INCLUDE_DIR
   apr.h
   HINTS
+    ${APR_INSTALL_DIR}/include
     ${APR_INSTALL_DIR}/include/apr-1
     /usr/include/apr-1
 )
 
 find_library(APR_LIBRARY
-  libapr-1.so
+  NAMES
+    libapr-1.lib
+    apr-1
   HINTS
     ${APR_INSTALL_DIR}/lib
     /usr/lib

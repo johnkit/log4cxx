@@ -38,15 +38,20 @@ set(CHARSET_USASCII     0)
 set(CHARSET_EBCDIC      0)
 
 # check function exists
+set(HAS_MBSRTOWCS 0)
 CHECK_FUNCTION_EXISTS(mbsrtowcs HAS_MBSRTOWCS)
+set(HAS_WCSTOMBS 0)
 CHECK_FUNCTION_EXISTS(wcstombs  HAS_WCSTOMBS)
+set(HAS_FWIDE 0)
 CHECK_FUNCTION_EXISTS(fwide     HAS_FWIDE)
 
 # check header exists
+set(HAS_SYSLOG 0)
 CHECK_INCLUDE_FILE(syslog.h HAS_SYSLOG)
+set(HAS_STD_LOCALE 0)
 CHECK_INCLUDE_FILE(locale.h HAS_STD_LOCALE)
-# check libesmtp exists
 
+# check libesmtp exists
 set(HAS_LIBESMTP 0)
 set(HAS_ODBC 0)
 if(with-SMTP)
@@ -60,6 +65,13 @@ set(APR_INSTALL_DIR CACHE PATH "Path to Apache Portable Runtime install director
 find_package(APR REQUIRED)
 set(APRutil_INSTALL_DIR CACHE PATH "Path to APR-util install directory")
 find_package(APRutil REQUIRED)
+
+# Include export header so that we can easily control symbol exporting
+# Setup by default *not* to export symbols unless explicitly stated.
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+include(GenerateExportHeader)
+
 
 # configure log4cxx.h
 configure_file(${PROJECT_SOURCE_DIR}/src/main/include/log4cxx/log4cxx.h.in
@@ -93,9 +105,16 @@ target_include_directories(log4cxx
         $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(log4cxx PUBLIC ${APR_LIBRARY} ${APRutil_LIBRARY})
+
+# Setup export header
+generate_export_header(log4cxx)
+
+
 install(TARGETS log4cxx
     EXPORT log4cxx-export
     LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
 )
 install(EXPORT log4cxx-export
     FILE log4cxx-config.cmake
