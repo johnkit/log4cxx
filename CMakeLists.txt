@@ -54,11 +54,12 @@ if(with-SMTP)
     set(HAS_LIBESMTP 0)
 endif()
 
-# Add vars for apr and apr-util
-set(APR_INCLUDE_DIR CACHE PATH "Path to Apache Portable Runtime include directory")
-set(APR_LIBRARY CACHE FILEPATH "Path to Apache Portable Runtime library")
-set(APR_UTIL_INCLUDE_DIR CACHE PATH "Path to APR-UTIL include directory")
-set(APR_UTIL_LIBRARY CACHE FILEPATH "Path to APR-UTIL library")
+# Find APR and APRutil packages
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+set(APR_INSTALL_DIR CACHE PATH "Path to Apache Portable Runtime install directory")
+find_package(APR REQUIRED)
+set(APRutil_INSTALL_DIR CACHE PATH "Path to APR-util install directory")
+find_package(APRutil REQUIRED)
 
 # configure log4cxx.h
 configure_file(${PROJECT_SOURCE_DIR}/src/main/include/log4cxx/log4cxx.h.in
@@ -86,12 +87,12 @@ set_target_properties(log4cxx
 target_include_directories(log4cxx
     PUBLIC
         ${APR_INCLUDE_DIR}
-        ${APR_UTIL_INCLUDE_DIR}
+        ${APRutil_INCLUDE_DIR}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/main/include>
         $<INSTALL_INTERFACE:include>
 )
-target_link_libraries(log4cxx PUBLIC ${APR_LIBRARY} ${APR_UTIL_LIBRARY})
+target_link_libraries(log4cxx PUBLIC ${APR_LIBRARY} ${APRutil_LIBRARY})
 install(TARGETS log4cxx
     EXPORT log4cxx-export
     LIBRARY DESTINATION lib
