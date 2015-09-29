@@ -28,6 +28,8 @@
 #endif
 #include <log4cxx/private/log4cxx_private.h>
 #include <cctype>
+#include <cstdlib>
+#include <cstring>
 #include <apr.h>
 
 

@@ -132,6 +132,13 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/main/include/log4cxx
     PATTERN ".*" EXCLUDE
     PATTERN "Makefile.am" EXCLUDE
 )
+
+# Install log4cxx_export.h
+install(FILES
+  ${PROJECT_BINARY_DIR}/log4cxx_export.h
+  DESTINATION include
+)
+
 # install generated header files from build tree
 install(DIRECTORY
     ${PROJECT_BINARY_DIR}/log4cxx
