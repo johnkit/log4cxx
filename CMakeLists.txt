@@ -147,5 +147,11 @@ install(DIRECTORY
     COMPONENT devel
 )
 
+# User options
+option(ENABLE_TESTING "Enable Testing" ON)
+if (ENABLE_TESTING)
+  enable_testing()
+  include(CTest)
+endif()
 
 add_subdirectory(src)
