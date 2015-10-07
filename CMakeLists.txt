@@ -6,6 +6,7 @@ include(CheckFunctionExists)
 include(CheckIncludeFile)
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(enable-unichar  0       CACHE BOOL "enable unichar(no)")
 set(enable-cfstring 0       CACHE BOOL "enable cfstring(no)")
@@ -87,7 +88,7 @@ configure_file(${PROJECT_SOURCE_DIR}/src/main/include/log4cxx/private/log4cxx_pr
 
 file(GLOB log4cxx_source "${PROJECT_SOURCE_DIR}/src/main/cpp/*.cpp")
 file(GLOB_RECURSE log4cxx_header "${PROJECT_SOURCE_DIR}/src/main/include/log4cxx/*.h")
-add_library(log4cxx SHARED 
+add_library(log4cxx SHARED
     ${log4cxx_source}
 )
 
@@ -146,3 +147,5 @@ install(DIRECTORY
     COMPONENT devel
 )
 
+
+add_subdirectory(src)
